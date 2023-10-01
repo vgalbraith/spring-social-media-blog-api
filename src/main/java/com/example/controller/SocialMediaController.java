@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,11 +74,22 @@ public class SocialMediaController {
     /**
      * Endpoint for retrieving all messages.
      * @return A list of all messages.
-     * @throws UnauthorizedException Thrown if the username/password combination is not accosiated with a registered account.
      */
     @GetMapping("/messages")
     public ResponseEntity<List<Message>> getAllMessages() {
         List<Message> messages = messageService.getAllMessages();
         return new ResponseEntity<List<Message>>(messages, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint for retrieving a message given it's message_id.
+     * @param message_id 
+     * @return The associated message object, empty body if not found.
+     */
+    @GetMapping("/messages/{message_id}")
+    public ResponseEntity<Message> getMessageById(@PathVariable int message_id) {
+        Message message = messageService.getMessageById(message_id);
+        if (message == null) return null;
+        return new ResponseEntity<Message>(message, HttpStatus.OK);
     }
 }

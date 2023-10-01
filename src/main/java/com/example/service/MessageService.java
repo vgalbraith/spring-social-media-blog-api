@@ -49,4 +49,12 @@ public class MessageService {
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
+
+    /**
+     * Used to retrieve a message from the repository given it's message_id.
+     * @return The associated message object, null if message_id not found.
+     */
+    public Message getMessageById(int message_id) {
+        return messageRepository.findById(message_id).orElse(null);
+    }
 }
