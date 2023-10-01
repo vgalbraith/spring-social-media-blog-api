@@ -1,8 +1,11 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,21 +33,51 @@ public class SocialMediaController {
         this.messageService = messageService;
     }
 
+    /**
+     * Endpoint for registering a new account.
+     * @param account The account to be registered.
+     * @return The persisted account including it's newly assigned account_id.
+     * @throws BadRequestException Thrown if there is an issue with the client's request.
+     * @throws ConflictException Thrown if the username is already associated with a registered account.
+     */
     @PostMapping("/register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) throws Exception {
         Account addedAccount = accountService.persistAccount(account);
         return new ResponseEntity<Account>(addedAccount, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for verifying a user login.
+     * @param account An account containing a username/password combination to be verified.
+     * @return The verified account object.
+     * @throws UnauthorizedException Thrown if the username/password combination is not accosiated with a registered account.
+     */
     @PostMapping("/login")
     public ResponseEntity<Account> loginAccount(@RequestBody Account account) throws Exception {
         Account verifiedAccount = accountService.verifyAccount(account);
         return new ResponseEntity<Account>(verifiedAccount, HttpStatus.OK);
     }
 
+    /**
+     * Endpoint for creating a new message.
+     * @param message The message to be created.
+     * @return The persisted message including it's newly assigned message_id.
+     * @throws BadRequestException Thrown if there is an issue with the client's request.
+     */
     @PostMapping("/messages")
     public ResponseEntity<Message> createMessage(@RequestBody Message message) throws Exception {
         Message addedMessage = messageService.persistMessage(message);
         return new ResponseEntity<Message>(addedMessage, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint for retrieving all messages.
+     * @return A list of all messages.
+     * @throws UnauthorizedException Thrown if the username/password combination is not accosiated with a registered account.
+     */
+    @GetMapping("/messages")
+    public ResponseEntity<List<Message>> getAllMessages() {
+        List<Message> messages = messageService.getAllMessages();
+        return new ResponseEntity<List<Message>>(messages, HttpStatus.OK);
     }
 }

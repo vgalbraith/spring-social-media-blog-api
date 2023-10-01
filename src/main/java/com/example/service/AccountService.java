@@ -23,7 +23,7 @@ public class AccountService {
     /**
      * Used to persist an account to the repository.
      * @param account The account to be added.
-     * @returns The persisted account including it's newly assigned account_id.
+     * @return The persisted account including it's newly assigned account_id.
      */
     public Account persistAccount(Account account) throws Exception {
     	if (account.getUsername().equals("")) {
@@ -46,7 +46,7 @@ public class AccountService {
     /**
      * Used to verify a login.
      * @param account Account object containing the username and password to verify.
-     * @return The matching account if the login is valid.
+     * @return The verified account object.
      */
     public Account verifyAccount(Account account) {
         List<Account> accounts = accountRepository.findAll();

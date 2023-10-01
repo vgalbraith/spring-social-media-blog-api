@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class MessageService {
     /**
      * Used to persist a message to the repository.
      * @param message The message to be added.
-     * @returns The persisted message including it's newly assigned message_id.
+     * @return The persisted message including it's newly assigned message_id.
      */
     public Message persistMessage(Message message) throws Exception {
     	if (message.getMessage_text().equals("")) {
@@ -38,5 +40,13 @@ public class MessageService {
         }
 
         return messageRepository.save(message);
+    }
+
+    /**
+     * Used to retrieve all messages from the repository.
+     * @return A list of all messages.
+     */
+    public List<Message> getAllMessages() {
+        return messageRepository.findAll();
     }
 }
