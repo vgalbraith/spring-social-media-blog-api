@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
 import com.example.entity.Message;
-import com.example.exception.BadRequestException;
-import com.example.exception.ConflictException;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 
@@ -114,5 +112,16 @@ public class SocialMediaController {
     public ResponseEntity<Integer> updateMessage(@PathVariable int message_id, @RequestBody Message message) {
         int rows = messageService.updateMessage(message_id, message.getMessage_text());
         return new ResponseEntity<Integer>(rows, HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint for retrieving all messages posted by the given account_id.
+     * @param account_id
+     * @return A list of all applicable messages.
+     */
+    @GetMapping("/accounts/{account_id}/messages")
+    public ResponseEntity<List<Message>> getAllMessagesByUserId(@PathVariable int account_id) {
+        List<Message> messages = messageService.getAllMessagesByUserId(account_id);
+        return new ResponseEntity<List<Message>>(messages, HttpStatus.OK);
     }
 }

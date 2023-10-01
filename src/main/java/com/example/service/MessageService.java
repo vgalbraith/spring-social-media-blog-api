@@ -99,4 +99,13 @@ public class MessageService {
             throw new BadRequestException("Message id is invalid.");
         }
     }
+
+    /**
+     * Endpoint for retrieving all messages posted by the given account_id.
+     * @param account_id
+     * @return A list of all applicable messages.
+     */
+    public List<Message> getAllMessagesByUserId(int account_id) {
+        return messageRepository.findAllByAccountId(account_id);
+    }
 }
