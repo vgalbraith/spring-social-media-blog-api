@@ -1,13 +1,13 @@
 package com.example.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
 import com.example.exception.ConflictException;
+import com.example.exception.UnauthorizedException;
 import com.example.exception.BadRequestException;
 import com.example.repository.AccountRepository;
 
@@ -21,12 +21,13 @@ public class AccountService {
     }
 
     /**
-     * Given a brand new transient account (meaning, no such account exists yet in the database),
-     * persist the account to the database (create a new database record for the account entity.)
+     * Used to persist an account to the repository.
+     * @param account The account to be added.
+     * @returns The persisted account including it's newly assigned account_id.
      */
     public Account persistAccount(Account account) throws Exception {
     	if (account.getUsername().equals("")) {
-    		throw new BadRequestException("Username cannot be blank.");
+            throw new BadRequestException("Username cannot be blank.");
         }
     	
         if (account.getPassword().length() < 4) {
@@ -40,5 +41,20 @@ public class AccountService {
             }
         }
         return accountRepository.save(account);
+    }
+
+    /**
+     * Used to verify a login.
+     * @param account Account object containing the username and password to verify.
+     * @return The matching account if the login is valid.
+     */
+    public Account verifyAccount(Account account) {
+        List<Account> accounts = accountRepository.findAll();
+        for (Account a : accounts) {
+            if (a.getUsername().equals(account.getUsername()) && a.getPassword().equals(account.getPassword())) {
+                return a;
+            }
+        }
+        throw new UnauthorizedException("Invalid username and/or password.");
     }
 }

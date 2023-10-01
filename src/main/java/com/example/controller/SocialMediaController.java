@@ -27,8 +27,14 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register")
-	public ResponseEntity<Account> addAccount(@RequestBody Account account) throws Exception {
+    public ResponseEntity<Account> registerAccount(@RequestBody Account account) throws Exception {
         Account addedAccount = accountService.persistAccount(account);
-        return new ResponseEntity<Account> (addedAccount, HttpStatus.OK);
-	}
+        return new ResponseEntity<Account>(addedAccount, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Account> loginAccount(@RequestBody Account account) throws Exception {
+        Account verifiedAccount = accountService.verifyAccount(account);
+        return new ResponseEntity<Account>(verifiedAccount, HttpStatus.OK);
+    }
 }
