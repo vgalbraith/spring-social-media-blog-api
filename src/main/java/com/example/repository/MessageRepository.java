@@ -14,9 +14,9 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
 
     /**
      * Query to retrieve all messages by a particluar user, given their account_id.
-     * @param account_id
+     * @param account_id Equivalent to posted_by.
      * @return A list of all applicable messages.
      */
     @Query("FROM Message WHERE posted_by = :account_id")
-    List<Message> findAllByAccountId(@Param("account_id") int account_id);
+    List<Message> findMessagesByPostedBy(@Param("account_id") int account_id);
 }

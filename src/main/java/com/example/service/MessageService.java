@@ -106,6 +106,6 @@ public class MessageService {
      * @return A list of all applicable messages.
      */
     public List<Message> getAllMessagesByUserId(int account_id) {
-        return messageRepository.findAllByAccountId(account_id);
+        return messageRepository.findMessagesByPostedBy(account_id);
     }
 }
