@@ -36,11 +36,8 @@ public class AccountService {
             throw new BadRequestException("Password must be at least 4 characters long.");
         }
     
-        List<Account> accounts = accountRepository.findAll();
-        for (Account a : accounts) {
-            if (a.getUsername().equals(account.getUsername())) {
-                throw new ConflictException("Username already exists.");
-            }
+        if (accountRepository.findAccountByUsername(account.getUsername()) != null) {
+            throw new ConflictException("Username already exists.");
         }
 
         return accountRepository.save(account);
@@ -53,13 +50,15 @@ public class AccountService {
      * @throws UnauthorizedException if the username and/or password are invalid.
      */
     public Account verifyAccount(Account account) {
-        List<Account> accounts = accountRepository.findAll();
-        for (Account a : accounts) {
-            if (a.getUsername().equals(account.getUsername()) && a.getPassword().equals(account.getPassword())) {
-                return a;
-            }
+        Account verifiedAccount = accountRepository.findAccountByUsername(account.getUsername());
+        if (verifiedAccount == null) {
+            throw new UnauthorizedException("Invalid username.");
+        }
+
+        if (!verifiedAccount.getPassword().equals(account.getPassword())) {
+            throw new UnauthorizedException("Invalid password.");
         }
         
-        throw new UnauthorizedException("Invalid username and/or password.");
+        return verifiedAccount;
     }
 }
